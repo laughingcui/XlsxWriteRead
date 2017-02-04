@@ -80,12 +80,23 @@ namespace XlsxWriteRead
 
             if (tbx_database.Text == "")
             {
-                MessageBox.Show("数据库名称为空");
+                MessageBox.Show("数据库名称不能为空");
+                return;
+            }
+            if (tbx_user.Text == "")
+            {
+                MessageBox.Show("用户名不能为空");
+                return;
+            }
+            if (tbx_pswd.Text == "")
+            {
+                MessageBox.Show("密码不能为空");
                 return;
             }
 
             string conn = "Database='" + tbx_database.Text + "';Data Source='localhost';User Id='" + tbx_user.Text + "';Password='" + tbx_pswd.Text + "';charset='utf8';pooling=true";
             MySqlHelper.Conn = conn;
+            
         }
 
         //创建案件
