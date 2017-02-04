@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XlsxWriteRead", "XlsxWriteRead\XlsxWriteRead.csproj", "{62B903F0-F52E-4E44-B24F-582DBC422A2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62B903F0-F52E-4E44-B24F-582DBC422A2A}.Debug|x86.ActiveCfg = Debug|x86
+		{62B903F0-F52E-4E44-B24F-582DBC422A2A}.Debug|x86.Build.0 = Debug|x86
+		{62B903F0-F52E-4E44-B24F-582DBC422A2A}.Release|x86.ActiveCfg = Release|x86
+		{62B903F0-F52E-4E44-B24F-582DBC422A2A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,20 @@
+mysql> show tables;
++------------------------+
+| Tables_in_test         |
++------------------------+
+| lisi                   |
+| zhangsan               |
+| zhangsan_denglurizhi   |
+| zhangsan_haoyouliebiao |
+| zhangsan_jiarudequn    |
+| zhangsan_zhucexinxi    |
++------------------------+
+6 rows in set (0.00 sec)
+
+
+
+算法现在还是可以，李四excel非正常格式，但是张三的表格没有问题，所以正常生成数据库表
+
+下面就看插入数据，如果张三正常，说明算法处理的可以，
+
+怎么把李四表格中情况处理

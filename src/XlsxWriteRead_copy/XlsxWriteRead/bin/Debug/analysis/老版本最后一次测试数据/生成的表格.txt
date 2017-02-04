@@ -1,0 +1,17 @@
+mysql> show tables;
++------------------------+
+| Tables_in_test         |
++------------------------+
+| lisi                   |
+| zhangsan               |
+| zhangsan_denglurizhi   |
+| zhangsan_haoyouliebiao |
+| zhangsan_jiarudequn    |
+| zhangsan_zhucexinxi    |
++------------------------+
+6 rows in set (0.00 sec)
+
+
+问题是出在  李四的表格 好友列表里
+
+但是第一个sheet是正常的，登陆日志，  所以这个算法需要优化
