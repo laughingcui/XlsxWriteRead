@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 
 using Mysql;
+using MySql.Data.MySqlClient;
 using ZipDemo;
 
 using NPOI.HPSF;
@@ -52,7 +53,7 @@ namespace XlsxWriteRead
         {
             //加载案件信息
             string sql = "select case_name,case_no,case_date,author from case_list;";
-            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+            DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
             dGv_CaseList.DataSource = data_set.Tables[0];
 
             if (dGv_CaseList.RowCount >= 2)
@@ -78,7 +79,7 @@ namespace XlsxWriteRead
                 return;
 
             string sql = "select file_name,case_no from excel_list where case_no='" + case_no + "';";
-            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+            DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
             dGv_XlsFiles.DataSource = data_set.Tables[0];
 
             if (dGv_XlsFiles.RowCount >= 2)
@@ -91,7 +92,7 @@ namespace XlsxWriteRead
         //删除当前选中案件
         private void btn_DeleteCase_Click(object sender, EventArgs e)
         {
-            //删除案件时，需要删除对应的数据表
+         //删除案件时，需要删除对应的数据表
             
          if (dGv_CaseList.CurrentRow == null)
          {
@@ -100,14 +101,20 @@ namespace XlsxWriteRead
          int index = dGv_CaseList.CurrentRow.Index;
          string case_no = dGv_CaseList.Rows[index].Cells[1].Value.ToString();
          string sql = "delete from case_list where case_no ='" + case_no + "';";
-         //string sql_delete_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like 'test%';";
+        //MySQL中，根据表名的前缀删除符合条件的表
+         string sql_delete_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '"+ case_no + "%';";
          if (case_no.Trim() == "")
              return;
 
          DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
          
-          //MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_table);
-           
+         MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_table);
+         while (reader.Read())
+         {
+             string sql_drop = "";
+             sql_drop = reader[0].ToString();
+             DataSet data_set1 = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql_drop);
+         }
             MessageBox.Show("案件已删除");
             ImportDataForm_Load(sender, e);
         }
@@ -222,7 +229,7 @@ namespace XlsxWriteRead
 
                 //判断当前excel文件是否在当前
                 string sql = "select count(*) from excel_list where file_name='" + file_name_Ch + "' and case_no='" + case_no + "';";
-                int count = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));
+                int count = Convert.ToInt32(Mysql.MySqlHelper.ExecuteScalar(Mysql.MySqlHelper.Conn, CommandType.Text, sql));
                 if (count >= 1)
                 {
                     MessageBox.Show("当前案件中已存在：" + file_name_Ch);
@@ -232,10 +239,10 @@ namespace XlsxWriteRead
 
                 sql = "insert into excel_list(file_name, case_no) values('";
                 sql += file_name_Ch + "', '" + case_no + "');";
-                MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, sql);
+                Mysql.MySqlHelper.ExecuteNonQuery(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
 
                 sql = "select id from excel_list where file_name='" + file_name_Ch + "' and case_no='" + case_no + "';";
-                int file_id = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));  //foreign key
+                int file_id = Convert.ToInt32(Mysql.MySqlHelper.ExecuteScalar(Mysql.MySqlHelper.Conn, CommandType.Text, sql));  //foreign key
 
                 int sheet_count = xls_file[i_file].sheetsList.Count;
                 for (int i_sheet = 0; i_sheet < sheet_count; i_sheet++)
@@ -245,10 +252,10 @@ namespace XlsxWriteRead
 
                     sql = "insert into sheet_list(sheet, excel_id) values('";
                     sql += sheet_name_Ch + "', '" + file_id + "');";
-                    MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, sql);
+                    Mysql.MySqlHelper.ExecuteNonQuery(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
 
                     sql = "select id from sheet_list where sheet='" + sheet_name_Ch + "' and excel_id='" + file_id + "';";
-                    int sheet_id = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));  //foreign key
+                    int sheet_id = Convert.ToInt32(Mysql.MySqlHelper.ExecuteScalar(Mysql.MySqlHelper.Conn, CommandType.Text, sql));  //foreign key
 
                     int field_count = xls_file[i_file].sheetsList[i_sheet].fieldsList.Count;
                     for (int i_field = 0; i_field < field_count; i_field++)
@@ -258,7 +265,7 @@ namespace XlsxWriteRead
 
                         sql = "insert into field_list(field, sheet_id) values('";
                         sql += field_name_Ch + "', '" + sheet_id + "');";
-                        MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, sql);
+                        Mysql.MySqlHelper.ExecuteNonQuery(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
                     }
                 }
             }
