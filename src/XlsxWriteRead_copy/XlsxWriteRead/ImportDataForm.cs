@@ -92,7 +92,15 @@ namespace XlsxWriteRead
             
         }
 
-        //删除当前选中的案件
+        /*删除当前选中的案件*/
+		  /*****************************************************************************
+            Function:       btn_DeleteCase_Click
+		    Description:    delete the selected case and drop the table about the case
+			Input:          object sender, EventArgs e
+			Output:         none
+			Return:         none
+			Others:
+	    ******************************************************************************/
         private void btn_DeleteCase_Click(object sender, EventArgs e)
         {
          //删除案件时，需要删除对应的数据表
@@ -101,29 +109,37 @@ namespace XlsxWriteRead
          {
              return;
          }
-         int index = dGv_CaseList.CurrentRow.Index;
-         string case_no = dGv_CaseList.Rows[index].Cells[1].Value.ToString();
-         string sql = "delete from case_list where case_no ='" + case_no + "';";
+         int indexCase = dGv_CaseList.CurrentRow.Index;
+         string caseNo = dGv_CaseList.Rows[indexCase].Cells[1].Value.ToString();
+         string sql = "delete from case_list where case_no ='" + caseNo + "';";
         //MySQL中，根据表名的前缀删除符合条件的表
-         string sql_delete_case_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + case_no + "%';";
-         
-         if (case_no.Trim() == "")
+         string sqlDeleteCaseTable = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + case_no + "%';";
+
+         if (caseNo.Trim() == "")
              return;
 
-         DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
+         DataSet dataSet = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
 
-         MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_case_table);
+         MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sqlDeleteCaseTable);
          while (reader.Read())
          {
-             string sql_drop = "";
-             sql_drop = reader[0].ToString();
-             DataSet data_set1 = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql_drop);
+             string sqlDrop = "";
+             sqlDrop = reader[0].ToString();
+             DataSet dataSet1 = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sqlDrop);
          }
             MessageBox.Show("案件已删除");
             ImportDataForm_Load(sender, e);
         }
 
         //删除当前选中的文件
+		/*****************************************************************************
+            Function:       btn_DeleteFile_Click
+		    Description:    delete the selected file and drop the table about the file
+			Input:          object sender, EventArgs e
+			Output:         none
+			Return:         none
+			Others:
+	    ******************************************************************************/
         private void btn_DeleteFile_Click(object sender, EventArgs e)
         {
             //删除文件时，需要删除对应的数据表
@@ -135,29 +151,28 @@ namespace XlsxWriteRead
             {
                 return;
             }
-            int index = dGv_CaseList.CurrentRow.Index;
-            int index_xls = dGv_XlsFiles.CurrentRow.Index;
-            //string file_name = dGv_CaseList.Rows[index].Cells[0].Value.ToString();//获取名称
+            int indexCase = dGv_CaseList.CurrentRow.Index;
+            int indexXls = dGv_XlsFiles.CurrentRow.Index;
 
-            string case_no = dGv_CaseList.Rows[index].Cells[1].Value.ToString();//获取编号
-            string file_name_table = dGv_XlsFiles.Rows[index_xls].Cells[0].Value.ToString();
-            string file_name_table_PY = EcanConvertToCh.convertCh(file_name_table);
-            string sql = "delete from excel_list where file_name = '" + file_name_table + "'and case_no ='" + case_no + "';";
+            string caseNo = dGv_CaseList.Rows[indexCase].Cells[1].Value.ToString();//获取编号
+            string fileName = dGv_XlsFiles.Rows[indexXls].Cells[0].Value.ToString();//获取选中的案件对应的excel_list表中的file_name
+            string fileNamePinyin = EcanConvertToCh.convertCh(fileName);
+
+            string sql = "delete from excel_list where file_name = '" + fileName + "'and case_no ='" + caseNo + "';"; 
+            /*MySQL中，根据表名的前缀删除符合条件的表*/
+            string sqlDeleteFileTable = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + caseNo + "" + fileNamePinyin + "%';";
             
-            //MySQL中，根据表名的前缀删除符合条件的表
-            string sql_delete_file_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + case_no + "" + file_name_table_PY + "%';";
-            //string sql_delete_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + case_no + "%';";
-            if (case_no.Trim() == "" || file_name_table.Trim() == "")
+            if (caseNo.Trim() == "" || fileName.Trim() == "")
                 return;
 
-            DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
+            DataSet dataSet = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
 
             MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_file_table);
             while (reader.Read())
             {
-                string sql_drop = "";
-                sql_drop = reader[0].ToString();
-                DataSet data_set1 = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql_drop);
+                string sqlDrop = "";
+                sqlDrop = reader[0].ToString();
+                DataSet data_set1 = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sqlDrop);
             }
             
             MessageBox.Show("文件已删除");
