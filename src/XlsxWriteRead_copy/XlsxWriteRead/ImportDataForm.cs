@@ -92,6 +92,24 @@ namespace XlsxWriteRead
         private void btn_DeleteCase_Click(object sender, EventArgs e)
         {
             //删除案件时，需要删除对应的数据表
+            
+         if (dGv_CaseList.CurrentRow == null)
+         {
+             return;
+         }
+         int index = dGv_CaseList.CurrentRow.Index;
+         string case_no = dGv_CaseList.Rows[index].Cells[1].Value.ToString();
+         string sql = "delete from case_list where case_no ='" + case_no + "';";
+         //string sql_delete_table = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like 'test%';";
+         if (case_no.Trim() == "")
+             return;
+
+         DataSet data_set = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
+         
+          //MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_table);
+           
+            MessageBox.Show("案件已删除");
+            ImportDataForm_Load(sender, e);
         }
 
         //删除当前选中文件
