@@ -113,7 +113,7 @@ namespace XlsxWriteRead
          string caseNo = dGv_CaseList.Rows[indexCase].Cells[1].Value.ToString();
          string sql = "delete from case_list where case_no ='" + caseNo + "';";
         //MySQL中，根据表名的前缀删除符合条件的表
-         string sqlDeleteCaseTable = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + case_no + "%';";
+         string sqlDeleteCaseTable = "select concat('drop table ', table_name, ';') from information_schema.tables where table_name like '" + caseNo + "%';";
 
          if (caseNo.Trim() == "")
              return;
@@ -167,7 +167,7 @@ namespace XlsxWriteRead
 
             DataSet dataSet = Mysql.MySqlHelper.GetDataSet(Mysql.MySqlHelper.Conn, CommandType.Text, sql);
 
-            MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sql_delete_file_table);
+            MySqlDataReader reader = Mysql.MySqlHelper.ExecuteReader(Mysql.MySqlHelper.Conn, CommandType.Text, sqlDeleteFileTable);
             while (reader.Read())
             {
                 string sqlDrop = "";
