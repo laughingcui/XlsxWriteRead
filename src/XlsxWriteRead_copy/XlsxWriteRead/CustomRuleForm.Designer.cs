@@ -42,6 +42,7 @@
             this.dGv_RuleDetail = new System.Windows.Forms.DataGridView();
             this.dGv_RuleList = new System.Windows.Forms.DataGridView();
             this.btn_CreateCustom = new System.Windows.Forms.Button();
+            this.btn_DeleteCustom = new System.Windows.Forms.Button();
             this.btn_AddCollisionItems = new System.Windows.Forms.Button();
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
@@ -94,14 +95,14 @@
             this.dGv_Sheets.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dGv_Sheets.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             this.dGv_Sheets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGv_Sheets.Location = new System.Drawing.Point(715, 40);
+            this.dGv_Sheets.Location = new System.Drawing.Point(704, 40);
             this.dGv_Sheets.MultiSelect = false;
             this.dGv_Sheets.Name = "dGv_Sheets";
             this.dGv_Sheets.ReadOnly = true;
             this.dGv_Sheets.RowHeadersVisible = false;
             this.dGv_Sheets.RowTemplate.Height = 23;
             this.dGv_Sheets.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dGv_Sheets.Size = new System.Drawing.Size(198, 357);
+            this.dGv_Sheets.Size = new System.Drawing.Size(209, 293);
             this.dGv_Sheets.TabIndex = 10;
             this.dGv_Sheets.SelectionChanged += new System.EventHandler(this.dGv_Sheets_SelectionChanged);
             // 
@@ -122,13 +123,13 @@
             this.dGv_Fields.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dGv_Fields.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dGv_Fields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGv_Fields.Location = new System.Drawing.Point(930, 40);
+            this.dGv_Fields.Location = new System.Drawing.Point(919, 40);
             this.dGv_Fields.Name = "dGv_Fields";
             this.dGv_Fields.ReadOnly = true;
             this.dGv_Fields.RowHeadersVisible = false;
             this.dGv_Fields.RowTemplate.Height = 23;
             this.dGv_Fields.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dGv_Fields.Size = new System.Drawing.Size(207, 357);
+            this.dGv_Fields.Size = new System.Drawing.Size(218, 293);
             this.dGv_Fields.TabIndex = 10;
             this.dGv_Fields.SelectionChanged += new System.EventHandler(this.dGv_Fields_SelectionChanged);
             // 
@@ -146,7 +147,7 @@
             this.dGv_CaseList.RowHeadersVisible = false;
             this.dGv_CaseList.RowTemplate.Height = 23;
             this.dGv_CaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dGv_CaseList.Size = new System.Drawing.Size(405, 357);
+            this.dGv_CaseList.Size = new System.Drawing.Size(405, 293);
             this.dGv_CaseList.TabIndex = 15;
             this.dGv_CaseList.SelectionChanged += new System.EventHandler(this.dGv_CaseList_SelectionChanged);
             // 
@@ -157,14 +158,14 @@
             this.dGv_XlsFiles.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dGv_XlsFiles.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             this.dGv_XlsFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGv_XlsFiles.Location = new System.Drawing.Point(428, 40);
+            this.dGv_XlsFiles.Location = new System.Drawing.Point(417, 40);
             this.dGv_XlsFiles.MultiSelect = false;
             this.dGv_XlsFiles.Name = "dGv_XlsFiles";
             this.dGv_XlsFiles.ReadOnly = true;
             this.dGv_XlsFiles.RowHeadersVisible = false;
             this.dGv_XlsFiles.RowTemplate.Height = 23;
             this.dGv_XlsFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dGv_XlsFiles.Size = new System.Drawing.Size(270, 357);
+            this.dGv_XlsFiles.Size = new System.Drawing.Size(281, 293);
             this.dGv_XlsFiles.TabIndex = 16;
             this.dGv_XlsFiles.SelectionChanged += new System.EventHandler(this.dGv_XlsFiles_SelectionChanged);
             // 
@@ -176,14 +177,16 @@
             this.groupBox1.Controls.Add(this.dGv_RuleDetail);
             this.groupBox1.Controls.Add(this.dGv_RuleList);
             this.groupBox1.Controls.Add(this.btn_CreateCustom);
+            this.groupBox1.Controls.Add(this.btn_DeleteCustom);
             this.groupBox1.Controls.Add(this.btn_AddCollisionItems);
             this.groupBox1.Font = new System.Drawing.Font("新宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox1.Location = new System.Drawing.Point(6, 403);
+            this.groupBox1.Location = new System.Drawing.Point(6, 330);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1133, 360);
+            this.groupBox1.Size = new System.Drawing.Size(1133, 362);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // label6
             // 
@@ -253,6 +256,17 @@
             this.btn_CreateCustom.UseVisualStyleBackColor = true;
             this.btn_CreateCustom.Click += new System.EventHandler(this.btn_CreateCustom_Click);
             // 
+            // btn_DeleteCustom
+            // 
+            this.btn_DeleteCustom.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btn_DeleteCustom.Location = new System.Drawing.Point(362, 11);
+            this.btn_DeleteCustom.Name = "btn_DeleteCustom";
+            this.btn_DeleteCustom.Size = new System.Drawing.Size(89, 23);
+            this.btn_DeleteCustom.TabIndex = 13;
+            this.btn_DeleteCustom.Text = "删除规则";
+            this.btn_DeleteCustom.UseVisualStyleBackColor = true;
+            this.btn_DeleteCustom.Click += new System.EventHandler(this.btn_DeleteCustom_Click);
+            // 
             // btn_AddCollisionItems
             // 
             this.btn_AddCollisionItems.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -267,7 +281,7 @@
             // btn_Ok
             // 
             this.btn_Ok.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_Ok.Location = new System.Drawing.Point(452, 766);
+            this.btn_Ok.Location = new System.Drawing.Point(452, 695);
             this.btn_Ok.Name = "btn_Ok";
             this.btn_Ok.Size = new System.Drawing.Size(89, 23);
             this.btn_Ok.TabIndex = 0;
@@ -278,7 +292,7 @@
             // btn_Cancel
             // 
             this.btn_Cancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_Cancel.Location = new System.Drawing.Point(547, 766);
+            this.btn_Cancel.Location = new System.Drawing.Point(547, 695);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(89, 23);
             this.btn_Cancel.TabIndex = 1;
@@ -291,7 +305,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
-            this.ClientSize = new System.Drawing.Size(1146, 794);
+            this.ClientSize = new System.Drawing.Size(1146, 719);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dGv_XlsFiles);
             this.Controls.Add(this.dGv_CaseList);
@@ -338,6 +352,7 @@
         private System.Windows.Forms.DataGridView dGv_RuleDetail;
         private System.Windows.Forms.DataGridView dGv_RuleList;
         private System.Windows.Forms.Button btn_CreateCustom;
+        private System.Windows.Forms.Button btn_DeleteCustom;
         private System.Windows.Forms.Button btn_AddCollisionItems;
         private System.Windows.Forms.Button btn_Ok;
         private System.Windows.Forms.Button btn_Cancel;
