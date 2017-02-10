@@ -180,8 +180,6 @@ namespace XlsxWriteRead
         private static string g_sheet_name = "";
         private static string g_field_name = "";
 
-
-
         //测试算法：是否为好友
         private void btn_friends_Click(object sender, EventArgs e)
         {
@@ -263,6 +261,7 @@ namespace XlsxWriteRead
 
         string rule_list_current_case_no = "";   //dGv_RuleList 当前选中的
         string rule_list_current_file_name = "";
+        string ruleName = "";
         //添加详细项
         private void btn_AddCollisionItems_Click(object sender, EventArgs e)
         {
@@ -318,7 +317,6 @@ namespace XlsxWriteRead
             dGv_RuleDetail.DataSource = data_set.Tables[0];
         }
 
-
         static int g_rule_id = 0;
         private void dGv_RuleList_SelectionChanged(object sender, EventArgs e)
         {
@@ -342,6 +340,32 @@ namespace XlsxWriteRead
             dGv_RuleDetail.Columns[5].Visible = false;
         }
 
+        //重新加载数据库信息
+        /*****************************************************************************
+            Function:       btn_DeleteCustom_Click
+            Description:    reload sql data
+            Input:          object sender, EventArgs e
+            Output:         none
+            Return:         none
+            Others:
+        ******************************************************************************/
+        private void CustomRuleFormReload(object sender, EventArgs e)
+        {
+            //加载规则数据
+            string sql = "select * from rule_list;";
+            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+
+            dGv_RuleList.DataSource = data_set.Tables[0];
+            dGv_RuleList.Columns[0].Visible = false;
+            dGv_RuleList.Columns[1].HeaderText = "名称";
+            dGv_RuleList.Columns[2].HeaderText = "类型";
+            dGv_RuleList.Columns[3].Visible = false;  //外键不显示
+            dGv_RuleList.Columns[4].HeaderText = "案件编号";
+            dGv_RuleList.Columns[5].HeaderText = "文件名";
+            dGv_RuleList.Columns[6].HeaderText = "Sheet信息";
+            dGv_RuleList.Columns[7].HeaderText = "字段";
+        }
+
         //删除当前选中的规则
         /*****************************************************************************
             Function:       btn_DeleteCustom_Click
@@ -359,9 +383,13 @@ namespace XlsxWriteRead
                 MessageBox.Show("未选中规则");
                 return;
             }
-            rule_list_current_case_no = dGv_RuleList.CurrentRow.Cells[4].Value.ToString();
-            rule_list_current_file_name = dGv_RuleList.CurrentRow.Cells[5].Value.ToString();
-
+            ruleName = dGv_RuleList.CurrentRow.Cells[1].Value.ToString();
+            //rule_list_current_file_name = dGv_RuleList.CurrentRow.Cells[5].Value.ToString();
+            string sql = "delete from rule_list where name='" + ruleName + "';";
+            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+            MessageBox.Show("规则删除成功!");
+            CustomRuleFormReload(sender, e);
+            //dGv_RuleList_SelectionChanged(sender, e);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
