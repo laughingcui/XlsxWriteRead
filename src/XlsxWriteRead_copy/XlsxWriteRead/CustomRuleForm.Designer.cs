@@ -44,6 +44,7 @@
             this.btn_CreateCustom = new System.Windows.Forms.Button();
             this.btn_DeleteCustom = new System.Windows.Forms.Button();
             this.btn_AddCollisionItems = new System.Windows.Forms.Button();
+            this.btn_DeleteRange = new System.Windows.Forms.Button();
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dGv_Sheets)).BeginInit();
@@ -179,6 +180,7 @@
             this.groupBox1.Controls.Add(this.btn_CreateCustom);
             this.groupBox1.Controls.Add(this.btn_DeleteCustom);
             this.groupBox1.Controls.Add(this.btn_AddCollisionItems);
+            this.groupBox1.Controls.Add(this.btn_DeleteRange);
             this.groupBox1.Font = new System.Drawing.Font("新宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox1.Location = new System.Drawing.Point(6, 330);
@@ -278,6 +280,17 @@
             this.btn_AddCollisionItems.UseVisualStyleBackColor = true;
             this.btn_AddCollisionItems.Click += new System.EventHandler(this.btn_AddCollisionItems_Click);
             // 
+            // btn_DeleteRange
+            // 
+            this.btn_DeleteRange.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btn_DeleteRange.Location = new System.Drawing.Point(985, 11);
+            this.btn_DeleteRange.Name = "btn_DeleteRange";
+            this.btn_DeleteRange.Size = new System.Drawing.Size(89, 23);
+            this.btn_DeleteRange.TabIndex = 13;
+            this.btn_DeleteRange.Text = "删除范围";
+            this.btn_DeleteRange.UseVisualStyleBackColor = true;
+            this.btn_DeleteRange.Click += new System.EventHandler(this.btn_DeleteRange_Click);
+            // 
             // btn_Ok
             // 
             this.btn_Ok.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -354,6 +367,7 @@
         private System.Windows.Forms.Button btn_CreateCustom;
         private System.Windows.Forms.Button btn_DeleteCustom;
         private System.Windows.Forms.Button btn_AddCollisionItems;
+        private System.Windows.Forms.Button btn_DeleteRange;
         private System.Windows.Forms.Button btn_Ok;
         private System.Windows.Forms.Button btn_Cancel;
     }

@@ -262,6 +262,8 @@ namespace XlsxWriteRead
         string rule_list_current_case_no = "";   //dGv_RuleList 当前选中的
         string rule_list_current_file_name = "";
         string ruleName = "";
+        int detailRuleId = 0;
+        
         //添加详细项
         private void btn_AddCollisionItems_Click(object sender, EventArgs e)
         {
@@ -316,6 +318,58 @@ namespace XlsxWriteRead
             DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
             dGv_RuleDetail.DataSource = data_set.Tables[0];
         }
+        //重新加载数据库中rule_detail表的信息
+        /*****************************************************************************
+            Function:       ruleDetailReload
+            Description:    reload sql rule_detail
+            Input:          object sender, EventArgs e
+            Output:         none
+            Return:         none
+            Others:
+        ******************************************************************************/
+        private void ruleDetailReload(object sender, EventArgs e)
+        {
+            //加载范围数据
+            string sql = "select * from rule_detail;";
+            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+            dGv_RuleDetail.DataSource = data_set.Tables[0];
+
+            dGv_RuleDetail.Columns[0].Visible = false;
+            dGv_RuleDetail.Columns[1].HeaderText = "案件编号";
+            dGv_RuleDetail.Columns[2].HeaderText = "文件名";
+            dGv_RuleDetail.Columns[3].HeaderText = "Sheet信息";
+            dGv_RuleDetail.Columns[4].HeaderText = "字段";
+            dGv_RuleDetail.Columns[5].Visible = false;
+        }
+
+        //删除选中的范围
+        private void btn_DeleteRange_Click(object sender, EventArgs e)
+        {
+            //当前是否选中或防止为空
+            if (dGv_RuleDetail.CurrentRow == null)
+            {
+                MessageBox.Show("未选中范围");
+                return;
+            }
+            //int rule_id = Convert.ToInt32(dGv_RuleList.CurrentRow.Cells[0].Value);
+            //detailRuleId = rule_id;
+            string detailRuleName = dGv_RuleDetail.CurrentRow.Cells[1].Value.ToString();
+            //string sql = "delete from rule_detail where case_no ='" + detailRuleName + "' and rule_id = '"+ detailRuleId +"';";
+            string sql = "delete from rule_detail where case_no ='" + detailRuleName + "';";
+
+            //DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
+            int count = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));
+            if (count == 0)
+            {
+                MessageBox.Show("范围删除成功！");
+                ruleDetailReload(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("范围删除失败！");
+                return;
+            }
+        }
 
         static int g_rule_id = 0;
         private void dGv_RuleList_SelectionChanged(object sender, EventArgs e)
@@ -340,16 +394,16 @@ namespace XlsxWriteRead
             dGv_RuleDetail.Columns[5].Visible = false;
         }
 
-        //重新加载数据库信息
+        //重新加载数据库中rule_list表的信息
         /*****************************************************************************
-            Function:       btn_DeleteCustom_Click
-            Description:    reload sql data
+            Function:       ruleListReload
+            Description:    reload sql rule_list
             Input:          object sender, EventArgs e
             Output:         none
             Return:         none
             Others:
         ******************************************************************************/
-        private void CustomRuleFormReload(object sender, EventArgs e)
+        private void ruleListReload(object sender, EventArgs e)
         {
             //加载规则数据
             string sql = "select * from rule_list;";
@@ -386,15 +440,25 @@ namespace XlsxWriteRead
             ruleName = dGv_RuleList.CurrentRow.Cells[1].Value.ToString();
             //rule_list_current_file_name = dGv_RuleList.CurrentRow.Cells[5].Value.ToString();
             string sql = "delete from rule_list where name='" + ruleName + "';";
-            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
-            MessageBox.Show("规则删除成功!");
-            CustomRuleFormReload(sender, e);
-            //dGv_RuleList_SelectionChanged(sender, e);
-        }
+           // DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
 
+            int count = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));
+
+            if (count == 0)
+            {
+                MessageBox.Show("规则删除成功！");
+                ruleListReload(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("规则删除失败！");
+                return;
+            }
+        }
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
+
     }
 }
