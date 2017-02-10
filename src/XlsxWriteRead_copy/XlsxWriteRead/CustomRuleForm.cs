@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 using Mysql;
 
@@ -224,11 +225,22 @@ namespace XlsxWriteRead
             string sheet_name = g_sheet_name;
             string field_name = g_field_name;
 
+            string sqlRenameCheck = "select * from rule_list where name = '" + rule_name + "';"; 
+            
             string sql = "insert into rule_list(name, type, excel_id, case_no, excel, sheet, field) ";
             sql += "values('" + rule_name + "', '" + rule_type + "', '" + excel_id + "', '" + case_no + "', '";
             sql += file_name + "', '" + sheet_name + "', '" + field_name + "');";
 
-            MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql);
+            int count = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sqlRenameCheck));
+            if (count >= 1)
+            {
+                MessageBox.Show("规则名已存在，请重新命名！");
+                return;
+            }
+            else {
+
+                MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql);
+            }
 
             sql = "select * from rule_list;";
             DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
@@ -330,9 +342,26 @@ namespace XlsxWriteRead
             dGv_RuleDetail.Columns[5].Visible = false;
         }
 
+        //删除当前选中的规则
+        /*****************************************************************************
+            Function:       btn_DeleteCustom_Click
+            Description:    delete the selected custom and drop the table about the custom
+            Input:          object sender, EventArgs e
+            Output:         none
+            Return:         none
+            Others:
+        ******************************************************************************/
         private void btn_DeleteCustom_Click(object sender, EventArgs e)
         {
-            
+            //当前是否选中或防止为空
+            if (dGv_RuleList.CurrentRow == null)
+            {
+                MessageBox.Show("未选中规则");
+                return;
+            }
+            rule_list_current_case_no = dGv_RuleList.CurrentRow.Cells[4].Value.ToString();
+            rule_list_current_file_name = dGv_RuleList.CurrentRow.Cells[5].Value.ToString();
+
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
