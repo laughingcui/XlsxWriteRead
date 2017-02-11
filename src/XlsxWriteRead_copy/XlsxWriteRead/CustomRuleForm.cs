@@ -327,10 +327,10 @@ namespace XlsxWriteRead
             Return:         none
             Others:
         ******************************************************************************/
-        private void ruleDetailReload(object sender, EventArgs e)
+        private void ruleDetailReload(object sender, EventArgs e, int ruleId)
         {
             //加载范围数据
-            string sql = "select * from rule_detail;";
+            string sql = "select * from rule_detail where rule_id = '" + ruleId +"';";
             DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
             dGv_RuleDetail.DataSource = data_set.Tables[0];
 
@@ -351,18 +351,27 @@ namespace XlsxWriteRead
                 MessageBox.Show("未选中范围");
                 return;
             }
-            //int rule_id = Convert.ToInt32(dGv_RuleList.CurrentRow.Cells[0].Value);
-            //detailRuleId = rule_id;
-            string detailRuleName = dGv_RuleDetail.CurrentRow.Cells[1].Value.ToString();
+            int rule_id = Convert.ToInt32(dGv_RuleList.CurrentRow.Cells[0].Value);
+            detailRuleId = rule_id;
+            //string rule1 = dGv_RuleList.CurrentRow.Cells[1].Value.ToString();
+            //string rule2 = dGv_RuleList.CurrentRow.Cells[2].Value.ToString();
+            //string rule3 = dGv_RuleList.CurrentRow.Cells[3].Value.ToString();
+            //string detailRuleName = dGv_RuleDetail.CurrentRow.Cells[0].Value.ToString();
+            string detailExcelNo = dGv_RuleDetail.CurrentRow.Cells[1].Value.ToString();//案件编号
+            string detailExcelName = dGv_RuleDetail.CurrentRow.Cells[2].Value.ToString(); //文件名
+            //string detailRuleName3 = dGv_RuleDetail.CurrentRow.Cells[3].Value.ToString();
+            //string detailRuleName4 = dGv_RuleDetail.CurrentRow.Cells[4].Value.ToString();
             //string sql = "delete from rule_detail where case_no ='" + detailRuleName + "' and rule_id = '"+ detailRuleId +"';";
-            string sql = "delete from rule_detail where case_no ='" + detailRuleName + "';";
+            string sql = "delete from rule_detail where case_no ='" + detailExcelNo + "' and excel = '" + detailExcelName + "';";
+            //string sql = "delete from rule_detail where rule_id = '"+ detailRuleId +"';";
 
             //DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, CommandType.Text, sql);
             int count = Convert.ToInt32(MySqlHelper.ExecuteScalar(MySqlHelper.Conn, CommandType.Text, sql));
             if (count == 0)
             {
                 MessageBox.Show("范围删除成功！");
-                ruleDetailReload(sender, e);
+                //ruleDetailReload(sender, e, detailExcelNo, detailExcelName);
+                ruleDetailReload(sender, e, detailRuleId);
             }
             else
             {
