@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Windows.Forms;
 
 using Mysql;
 using Chinese2Pinyin;
@@ -20,6 +21,7 @@ namespace XlsxWriteRead
             notDefine = 0,
             isQQfriend = 1,     //QQ好友
             hasCommonQQfriend,  //有共同QQ好友
+            mutualQQFried,  //互为共同QQ好友
             hasCommonQQteam,    //有共同QQ群
             isOneMachine        //同一个终端登录
         }
@@ -99,6 +101,7 @@ namespace XlsxWriteRead
             public string file_name_Ch;
             public string sheet_name_Ch;
             public string field_name_Ch;
+
             public List<SField> field_values; //因为某列中可能存在多个字段值
         }
 
@@ -125,8 +128,6 @@ namespace XlsxWriteRead
                     {
                         return false;
                     }
-
-                    //
                     result.rule_name = source.rule_name;
                     result.type = source.type;
                     result.case_no = source.case_no;
@@ -141,8 +142,6 @@ namespace XlsxWriteRead
                     {
                         return false;
                     }
-
-                    //
                     result.rule_name = source.rule_name;
                     result.type = source.type;
                     result.case_no = source.case_no;
@@ -151,14 +150,28 @@ namespace XlsxWriteRead
                     result.field_name_Ch = source.field_name_Ch;
                     output.Add(result);
                 }
+                else if (source.type == AlgType.mutualQQFried)
+                {
+                    if (!isMutualQQFried(ref source, ref result))
+                    {
+                        return false;
+                    }
+                    result.rule_name = source.rule_name;
+                    result.type = source.type;
+                    result.case_no = source.case_no;
+                    result.file_name_Ch = source.file_name_Ch;
+                    result.sheet_name_Ch = source.sheet_name_Ch;
+                    result.field_name_Ch = source.field_name_Ch;
+                    output.Add(result);
+                    
+                    MessageBox.Show("调用互为共同好友的方法");
+                }
                 else if (source.type == AlgType.hasCommonQQteam)
                 {
                     if (!Alg_hasCommonQQteam(ref source, ref result))
                     {
                         return false;
                     }
-
-                    //
                     result.rule_name = source.rule_name;
                     result.type = source.type;
                     result.case_no = source.case_no;
@@ -169,7 +182,7 @@ namespace XlsxWriteRead
                 }
                 else if (source.type == AlgType.isOneMachine)
                 {
-                    
+
                 }
                 else
                 {
@@ -336,6 +349,75 @@ namespace XlsxWriteRead
             return true;
         }
 
+        #endregion
+
+        #region 互为共同QQ好友
+        public static bool isMutualQQFried(ref SSourceItem source, ref SResult result)
+        {
+            MessageBox.Show("把我调用啦！");
+            return true;
+            /*
+            string src_case_no = source.case_no;
+            string src_file_PY = EcanConvertToCh.convertCh(source.file_name_Ch);
+            string src_sheet_PY = EcanConvertToCh.convertCh(source.sheet_name_Ch);
+            string src_field_PY = EcanConvertToCh.convertCh(source.field_name_Ch);
+            string src_table = src_case_no + src_file_PY + src_sheet_PY;
+
+            string sql = "select " + src_field_PY + " from " + src_table + ";";
+            DataSet data_set = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, sql);
+
+            foreach (DataTable dt in data_set.Tables)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        string src_field_value = dr[dc].ToString();  //取得其中一个QQ
+
+                        //进行遍历其他范围
+                        int target_count = source.target_list.Count;
+                        for (int i_target = 0; i_target < target_count; i_target++)
+                        {
+                            STargetItem target = source.target_list[i_target];
+
+                            string target_case_no = target.case_no;
+                            string target_file_PY = EcanConvertToCh.convertCh(target.file_name_Ch);
+                            string target_sheet_PY = EcanConvertToCh.convertCh(target.sheet_name_Ch);
+                            string target_field_PY = EcanConvertToCh.convertCh(target.field_name_Ch);
+
+                            string target_table = target_case_no + target_file_PY + target_sheet_PY;
+
+
+                            if (hasExist(src_field_value, target_table, target_field_PY))
+                            {
+                                //记录其中一个QQ找到了互为好友的
+                                SField field = new SField();
+                                field.value = src_field_value;
+                                field.target_list = new List<SMatchConditionTarget>();
+
+                                //记录符合条件的信息
+                                SMatchConditionTarget match_target = new SMatchConditionTarget();
+                                match_target.case_no = target.case_no;
+                                match_target.file_name_Ch = target.file_name_Ch;
+                                match_target.sheet_name_Ch = target.sheet_name_Ch;
+                                match_target.field_name_Ch = target.field_name_Ch;
+                                match_target.field_value = src_field_value;
+
+                                field.target_list.Add(match_target);  //字段 对应 符合条件信息
+                                result.field_values.Add(field);   // 将其中的一个字段值对比结果符合条件的记录
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        //进行第二次遍历
+                        
+                    }
+                }
+            }
+            return true;*/
+        }
         #endregion
 
         #region 与规则中的源存在共同QQ群

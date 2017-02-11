@@ -150,6 +150,7 @@
             this.dGv_CaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dGv_CaseList.Size = new System.Drawing.Size(405, 293);
             this.dGv_CaseList.TabIndex = 15;
+            this.dGv_CaseList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dGv_CaseList_CellContentClick);
             this.dGv_CaseList.SelectionChanged += new System.EventHandler(this.dGv_CaseList_SelectionChanged);
             // 
             // dGv_XlsFiles

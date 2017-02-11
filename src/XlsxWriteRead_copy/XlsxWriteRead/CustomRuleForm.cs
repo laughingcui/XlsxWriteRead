@@ -322,7 +322,7 @@ namespace XlsxWriteRead
         /*****************************************************************************
             Function:       ruleDetailReload
             Description:    reload sql rule_detail
-            Input:          object sender, EventArgs e
+            Input:          object sender, EventArgs e, int ruleId
             Output:         none
             Return:         none
             Others:
@@ -465,6 +465,11 @@ namespace XlsxWriteRead
             }
         }
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dGv_CaseList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

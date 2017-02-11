@@ -83,7 +83,7 @@ namespace XlsxWriteRead
             Algorithm.SSourceItem rule = new Algorithm.SSourceItem();
             rule.target_list = new List<Algorithm.STargetItem>();
 
-            string rule_name = dGv_RuleList.CurrentRow.Cells[1].Value.ToString();
+            string rule_name = dGv_RuleList.CurrentRow.Cells[1].Value.ToString();//获取规则
             int rule_type = Convert.ToInt32(dGv_RuleList.CurrentRow.Cells[2].Value);
 
             string src_case_no = dGv_RuleList.CurrentRow.Cells[4].Value.ToString();
@@ -98,7 +98,9 @@ namespace XlsxWriteRead
             rule.sheet_name_Ch = src_sheet_name;
             rule.field_name_Ch = src_field_name;
 
+            /*获取选中的规则对应的范围*/
             int target_count = dGv_RuleDetail.RowCount;
+            
             for (int i_target = 0; i_target < target_count; i_target++)
             {
                 Algorithm.STargetItem target = new Algorithm.STargetItem();
@@ -107,14 +109,44 @@ namespace XlsxWriteRead
                 target.sheet_name_Ch = dGv_RuleDetail.Rows[i_target].Cells[3].Value.ToString();
                 target.field_name_Ch = dGv_RuleDetail.Rows[i_target].Cells[4].Value.ToString();
 
-                rule.target_list.Add(target);
+                rule.target_list.Add(target);//将取出的规则集放入list中，目前是只取出选中的规则
             }
 
             List<Algorithm.SSourceItem> rule_list = new List<Algorithm.SSourceItem>();
             List<Algorithm.SResult> result_list = new List<Algorithm.SResult>();
 
-            rule_list.Add(rule);
+            rule_list.Add(rule);//将选中的规则对应的范围重新赋值给rule_list
 
+            //对规则内部的范围重新建规则，即将选中的规则所包含的范围进行重新规则和范围的赋值
+            for (int i_target = 0; i_target < rule.target_list.Count - 1; i_target++)
+            {
+                Algorithm.SSourceItem reDefineRule = new Algorithm.SSourceItem();
+                reDefineRule.target_list = new List<Algorithm.STargetItem>();
+
+                //新建组规则
+                reDefineRule.type = (Algorithm.AlgType)rule_type;
+                reDefineRule.rule_name = rule_name;
+                reDefineRule.case_no = rule.case_no;
+                reDefineRule.file_name_Ch = rule.target_list[i_target].file_name_Ch;
+                reDefineRule.sheet_name_Ch = rule.target_list[i_target].sheet_name_Ch;
+                reDefineRule.field_name_Ch = rule.target_list[i_target].field_name_Ch;
+
+                //新建范围
+                for (int i_i_target = (i_target + 1); i_i_target < rule.target_list.Count; i_i_target++)
+                {
+                    Algorithm.STargetItem reDefineDetail = new Algorithm.STargetItem();
+                    reDefineDetail.case_no = rule.case_no;
+                    reDefineDetail.file_name_Ch = rule.target_list[i_i_target].file_name_Ch;
+                    reDefineDetail.sheet_name_Ch = rule.target_list[i_i_target].sheet_name_Ch;
+                    reDefineDetail.field_name_Ch = rule.target_list[i_i_target].field_name_Ch;
+
+                    reDefineRule.target_list.Add(reDefineDetail);
+                }
+
+                rule_list.Add(reDefineRule);
+            }
+
+            //调用分析方法
             Algorithm.Analysis(ref rule_list, ref result_list);
 
             int result_count = result_list.Count;
@@ -137,7 +169,6 @@ namespace XlsxWriteRead
                         result_info += "\t" + match_target.case_no + "   " + match_target.file_name_Ch + "  " +  match_target.field_value  + "\r\n";
                     }
                 }
-
                 tBx_ResultInfo.Text += result_info;
 			}
         }

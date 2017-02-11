@@ -16,7 +16,6 @@ namespace XlsxWriteRead
             InitializeComponent();
         }
 
-
         public string g_rule_name = "";
         //public string g_rule_type = "";
         public Algorithm.AlgType g_rule_type;
@@ -31,7 +30,6 @@ namespace XlsxWriteRead
                 MessageBox.Show("请正确填写信息");
                 return;
             }
-
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
         }
@@ -42,10 +40,10 @@ namespace XlsxWriteRead
             this.Close();
         }
 
-        string[] type = { "寻找QQ好友", "共同QQ好友", "共同QQ群", "同一个终端" };
+        string[] type = { "寻找QQ好友", "共同QQ好友","互为共同QQ好友", "共同QQ群", "同一个终端" };
         private void RuleInfoForm_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 cBx_RuleType.Items.Add(type[i]);   
             }
@@ -61,6 +59,10 @@ namespace XlsxWriteRead
             else if (text.Equals("共同QQ好友"))
             {
                 g_rule_type = Algorithm.AlgType.hasCommonQQfriend;
+            }
+            else if (text.Equals("互为共同QQ好友"))
+            {
+                g_rule_type = Algorithm.AlgType.mutualQQFried;
             }
             else if (text.Equals("共同QQ群"))
             {
