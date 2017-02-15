@@ -64,7 +64,7 @@ namespace XlsxWriteRead
 
         //一键自动分析时
         List<Algorithm.SSourceItem> g_rule_list = new List<Algorithm.SSourceItem>();
-        string[] type = { "寻找QQ好友", "共同QQ好友", "共同QQ群", "同一个终端" };
+        string[] type = { "寻找QQ好友", "共同QQ好友", "互为共同QQ好友", "共同QQ群", "同一个终端" };
 
         private void btn_Analysis_Click(object sender, EventArgs e)
         {
@@ -148,7 +148,7 @@ namespace XlsxWriteRead
 
             //调用分析方法
             Algorithm.Analysis(ref rule_list, ref result_list);
-
+            //将分析结果进行输出显示
             int result_count = result_list.Count;
             for (int i_result = 0; i_result < result_count; i_result++)
 			{
